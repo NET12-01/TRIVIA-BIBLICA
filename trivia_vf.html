@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia Bíblica V o F - Centro de Vida</title>
+    <style>
+        :root {
+            --primary-color: #2b4c7e;
+            --secondary-color: #4a90e2;
+            --accent-color: #e67e22;
+            --bg-color: #f4f7f6;
+            --text-color: #2c3e50;
+            --success-color: #27ae60;
+            --error-color: #c0392b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Pantalla de Bienvenida */
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+        }
+
+        .welcome-logo {
+            width: 130px;
+            height: 130px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+            100% { transform: scale(1); }
+        }
+
+        /* Cabecera */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            border-bottom: 2px solid var(--bg-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .header-logo {
+            width: 45px;
+            height: 45px;
+        }
+
+        .header-logo img, .welcome-logo img {
+            width: 100%;
+            height: auto;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #7f8c8d;
+            margin-top: 5px;
+            margin-bottom: 25px;
+        }
+
+        .status-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--secondary-color);
+            font-size: 18px;
+        }
+
+        .statement-box {
+            background-color: #eef2f7;
+            padding: 25px 20px;
+            border-radius: 12px;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            border-left: 6px solid var(--primary-color);
+            line-height: 1.4;
+            text-align: center;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .vf-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .btn-vf {
+            border: none;
+            padding: 15px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+            transition: transform 0.2s, opacity 0.2s;
+            min-width: 160px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn-true { background-color: var(--success-color); }
+        .btn-false { background-color: var(--error-color); }
+
+        .btn-vf:hover:not(:disabled) {
+            transform: translateY(-3px);
+            opacity: 0.9;
+        }
+
+        .btn-vf:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .explanation-box {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            min-height: 40px;
+            display: none;
+        }
+
+        .explanation-box.correct {
+            background-color: #e8f5e9;
+            color: var(--success-color);
+            display: block;
+            animation: pop 0.3s ease;
+        }
+
+        .explanation-box.incorrect {
+            background-color: #ffebee;
+            color: var(--error-color);
+            display: block;
+            animation: shake 0.3s ease;
+        }
+
+        .action-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            font-size: 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: background 0.2s;
+        }
+
+        .action-btn:hover { background-color: #d35400; }
+
+        .hidden { display: none !important; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- PANTALLA DE BIENVENIDA -->
+    <div id="welcome-screen" class="welcome-screen">
+        <div class="welcome-logo">
+            <img src="img/logo.png" alt="Logo Centro de Vida">
+        </div>
+        <h1>Centro de Vida</h1>
+        <div class="subtitle">Trivia Bíblica: ¿Verdadero o Falso? (10 Preguntas)</div>
+        <button class="action-btn" onclick="startGame()">Comenzar Trivia</button>
+    </div>
+
+    <!-- PANTALLA DEL JUEGO -->
+    <div id="game-screen" class="hidden">
+        <div class="header">
+            <div class="header-logo">
+                <img src="img/logo.png" alt="Logo Centro de Vida">
+            </div>
+            <h1>Centro de Vida</h1>
+        </div>
+        
+        <div class="status-panel">
+            <div id="question-number">Pregunta: 1 / 10</div>
+            <div id="score-display">Puntos: 0</div>
+        </div>
+
+        <div class="statement-box" id="statement-text">
+            Cargando afirmación...
+        </div>
+
+        <div class="vf-buttons">
+            <button class="btn-vf btn-true" id="btn-t" onclick="handleAnswer(true)">Verdadero (V)</button>
+            <button class="btn-vf btn-false" id="id-f" onclick="handleAnswer(false)">Falso (F)</button>
+        </div>
+
+        <div class="explanation-box" id="explanation-text"></div>
+
+        <button class="action-btn hidden" id="next-btn" onclick="nextQuestion()">Siguiente Pregunta</button>
+    </div>
+</div>
+
+<script>
+    // Banco exacto de 10 preguntas
+    const dbVF = [
+        { afirmacion: "Matusalén fue el hombre más longevo de la Biblia, viviendo un total de 969 años.", respuesta: true, detalle: "¡Correcto! Se registra en Génesis 5:27." },
+        { afirmacion: "El libro de la Biblia con menos capítulos es Abdías.", respuesta: false, detalle: "¡Falso! El libro más corto por capítulos es 2 Juan (tiene solo 1 capítulo, al igual que Abdías, pero con menos versículos)." },
+        { afirmacion: "David era el hijo mayor de Isaí.", respuesta: false, detalle: "¡Falso! David era el menor de los ocho hijos de Isaí (1 Samuel 16)." },
+        { afirmacion: "El apóstol Pablo nació en la ciudad de Tarso.", respuesta: true, detalle: "¡Correcto! Él mismo lo menciona en Hechos 22:3." },
+        { afirmacion: "La señal del pacto de Dios con Noé de no volver a inundar la Tierra fue una paloma.", respuesta: false, detalle: "¡Falso! La señal del pacto fue el arcoíris en las nubes (Génesis 9:13)." },
+        { afirmacion: "Jesús alimentó a los cinco mil hombres usando solamente 5 panes y 2 peces.", respuesta: true, detalle: "¡Correcto! Registrado en Mateo 14:17." },
+        { afirmacion: "Sansón perdió su tremenda fuerza física porque le cortaron la barba.", respuesta: false, detalle: "¡Falso! Perdió su fuerza cuando le cortaron las siete guedejas de su cabello (Jueces 16:19)." },
+        { afirmacion: "El primer milagro registrado de Jesús fue convertir el agua en vino en las bodas de Caná.", respuesta: true, detalle: "¡Correcto! Se encuentra en Juan 2:11." },
+        { afirmacion: "Moisés lideró al pueblo de Israel y también cruzó el río Jordán hacia la Tierra Prometida.", respuesta: false, detalle: "¡Falso! Moisés vio la tierra de lejos, pero quien lideró el cruce del Jordán fue Josué (Josué 1)." },
+        { afirmacion: "Apocalipsis es el último libro de la Biblia y cuenta con exactamente 22 capítulos.", respuesta: true, detalle: "¡Correcto! Cierra las Sagradas Escrituras con 22 capítulos." }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let isTurnOver = false;
+    let audioCtx = null;
+
+    function initAudioContext() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+    }
+
+    function playSound(type) {
+        initAudioContext();
+        if (!audioCtx) return;
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+
+        if (type === 'success') {
+            osc.frequency.setValueAtTime(523.25, now); // Do
+            osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.1); // Mi
+            gain.gain.setValueAtTime(0.1, now);
+            gain.gain.linearRampToValueAtTime(0, now + 0.25);
+            osc.start(now);
+            osc.stop(now + 0.25);
+        } else if (type === 'error') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(150, now);
+            osc.frequency.linearRampToValueAtTime(90, now + 0.25);
+            gain.gain.setValueAtTime(0.15, now);
+            gain.gain.linearRampToValueAtTime(0, now + 0.25);
+            osc.start(now);
+            osc.stop(now + 0.25);
+        } else if (type === 'victory') {
+            osc.frequency.setValueAtTime(523.25, now);
+            osc.frequency.setValueAtTime(659.25, now + 0.1);
+            osc.frequency.setValueAtTime(783.99, now + 0.2);
+            gain.gain.setValueAtTime(0.1, now);
+            gain.gain.linearRampToValueAtTime(0, now + 0.6);
+            osc.start(now);
+            osc.stop(now + 0.6);
+        }
+    }
+
+    function startGame() {
+        initAudioContext();
+        document.getElementById("welcome-screen").classList.add("hidden");
+        document.getElementById("game-screen").classList.remove("hidden");
+        
+        // Mezclar las 10 preguntas para que varíe el orden cada vez que jueguen
+        dbVF.sort(() => Math.random() - 0.5);
+        loadQuestion();
+        setupKeyboard();
+    }
+
+    function loadQuestion() {
+        isTurnOver = false;
+        
+        document.getElementById("question-number").textContent = `Pregunta: ${currentQuestionIndex + 1} / 10`;
+        document.getElementById("next-btn").classList.add("hidden");
+        
+        const expBox = document.getElementById("explanation-text");
+        expBox.className = "explanation-box";
+        expBox.textContent = "";
+
+        // Habilitar botones de juego
+        document.getElementById("btn-t").disabled = false;
+        document.getElementById("id-f").disabled = false;
+
+        const currentData = dbVF[currentQuestionIndex];
+        document.getElementById("statement-text").textContent = currentData.afirmacion;
+    }
+
+    function setupKeyboard() {
+        document.addEventListener("keydown", (event) => {
+            if (document.getElementById("game-screen").classList.contains("hidden")) return;
+
+            if (isTurnOver) {
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    nextQuestion();
+                }
+                return;
+            }
+
+            if (event.key.toUpperCase() === "V") {
+                handleAnswer(true);
+            } else if (event.key.toUpperCase() === "F") {
+                handleAnswer(false);
+            }
+        });
+    }
+
+    function handleAnswer(userSelected) {
+        if (isTurnOver) return;
+        isTurnOver = true;
+
+        // Deshabilitar botones de V o F
+        document.getElementById("btn-t").disabled = true;
+        document.getElementById("id-f").disabled = true;
+
+        const currentData = dbVF[currentQuestionIndex];
+        const expBox = document.getElementById("explanation-text");
+
+        if (userSelected === currentData.respuesta) {
+            playSound('success');
+            score += 10;
+            document.getElementById("score-display").textContent = `Puntos: ${score}`;
+            expBox.textContent = `¡Correcto! ${currentData.detalle}`;
+            expBox.classList.add("correct");
+        } else {
+            playSound('error');
+            expBox.textContent = `Incorrecto. ${currentData.detalle}`;
+            expBox.classList.add("incorrect");
+        }
+
+        document.getElementById("next-btn").classList.remove("hidden");
+        document.getElementById("next-btn").focus();
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < 10) {
+            loadQuestion();
+        } else {
+            playSound('victory');
+            document.getElementById("statement-text").textContent = "¡Has completado las 10 preguntas de la trivia!";
+            document.getElementById("question-number").textContent = "Juego Terminado";
+            
+            const expBox = document.getElementById("explanation-text");
+            expBox.textContent = `Puntuación Final: ${score} de 100 puntos. ¡Dios bendiga enormemente a Centro de Vida! ✨`;
+            expBox.className = "explanation-box correct";
+            
+            document.getElementById("next-btn").classList.add("hidden");
+            document.getElementById("btn-t").classList.add("hidden");
+            document.getElementById("id-f").classList.add("hidden");
+        }
+    }
+</script>
+
+</body>
+</html>
